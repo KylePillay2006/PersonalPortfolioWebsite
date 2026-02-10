@@ -2,7 +2,6 @@
 
 [![GitHub](https://img.shields.io/badge/GitHub-KylePillay2006-181717?style=for-the-badge&logo=github)](https://github.com/KylePillay2006)
 [![YouTube](https://img.shields.io/badge/YouTube-ByteSizedCode-FF0000?style=for-the-badge&logo=youtube)](https://youtube.com/@bytesizedcode123)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg?style=for-the-badge)](LICENSE)
 
 > A vibrant, modern portfolio website showcasing my journey as a full-stack developer with a passion for creating beautiful digital experiences.
 
