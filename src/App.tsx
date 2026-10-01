@@ -156,7 +156,7 @@ function App() {
           <div className="hero-portrait reveal">
             <div className="portrait-frame">
               <div className="portrait-halo" />
-              <img src="./portrait.jpg" alt="Kyle Pillay in a formal shirt and tie" />
+              <img src={`${import.meta.env.BASE_URL}portrait.jpg`} alt="Kyle Pillay in a formal shirt and tie" />
               <div className="portrait-label">
                 <span>Based in</span>
                 <strong>South Africa</strong>
