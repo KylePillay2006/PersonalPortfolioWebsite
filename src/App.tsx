@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useState } from "react";
-import portrait from "./imports/kyle-portrait.jpeg";
+import portrait from "./imports/kyle-portrait.png";
 
 type IconName =
   | "arrow"
