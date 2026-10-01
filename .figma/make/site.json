@@ -1,0 +1,10 @@
+{
+  "description": "A polished, animated personal portfolio showcasing a full-stack developer's skills, projects, and services with a modern, sophisticated design.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
