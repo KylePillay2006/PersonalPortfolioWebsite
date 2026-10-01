@@ -1,4 +1,7 @@
+
+// Cache bust: v2
 import { defineConfig, type HtmlTagDescriptor, type Plugin } from 'vite'
+// ... rest of your code
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import path from 'node:path'
@@ -359,3 +362,4 @@ function figmaMakeKitPlugin(options: { storiesGlob: string | string[] }): Plugin
     },
   }
 }
+
