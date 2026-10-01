@@ -1,5 +1,4 @@
 import { FormEvent, useEffect, useState } from "react";
-import portrait from "./imports/kyle-portrait.png";
 
 type IconName =
   | "arrow"
@@ -157,7 +156,7 @@ function App() {
           <div className="hero-portrait reveal">
             <div className="portrait-frame">
               <div className="portrait-halo" />
-              <img src={portrait} alt="Kyle Pillay in a formal shirt and tie" />
+              <img src="/PersonalPortfolioWebsite/portrait.jpg" alt="Kyle Pillay in a formal shirt and tie" />
               <div className="portrait-label">
                 <span>Based in</span>
                 <strong>South Africa</strong>
