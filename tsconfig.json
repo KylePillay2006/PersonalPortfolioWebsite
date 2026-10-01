@@ -6,7 +6,7 @@
     "module": "ESNext",
     "skipLibCheck": true,
     "moduleResolution": "bundler",
-    base: '/PersonalPortfolioWebsite/', // <--- ADD THIS LINE
+    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
     },
