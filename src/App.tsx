@@ -1,4 +1,7 @@
-import { FormEvent, useEffect, useState } from "react";
+import { useEffect, useState, type CSSProperties, type FormEvent, type PointerEvent, type ReactNode } from "react";
+import problemSolverImg from "./assets/codechef-problem-solver.png";
+import streakImg from "./assets/codechef-streak.png";
+import sqlTestImg from "./assets/codechef-sql-test.png";
 
 type IconName =
   | "arrow"
@@ -16,7 +19,7 @@ type IconName =
   | "youtube";
 
 function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
-  const paths: Record<IconName, React.ReactNode> = {
+  const paths: Record<IconName, ReactNode> = {
     arrow: <><path d="M5 12h14" /><path d="m13 6 6 6-6 6" /></>,
     azure: <><path d="M5 18 11 4l4 9H9l-4 5Z" /><path d="m13 18 3-8 4 8h-7Z" /></>,
     cloud: <path d="M7 18h10a4 4 0 0 0 .7-7.94A6 6 0 0 0 6.3 8.3 4.5 4.5 0 0 0 7 18Z" />,
@@ -83,31 +86,46 @@ const services: { icon: IconName; title: string; text: string }[] = [
   { icon: "design", title: "UI/UX Design", text: "Refined digital experiences where visual craft and usability work in harmony." },
 ];
 
+type Badge = {
+  id: string;
+  platform: "CodeChef" | "LeetCode";
+  title: string;
+  detail: string;
+  shape: "hex" | "shield" | "circle" | "pent";
+  color: string;
+  image?: string;
+  icon: IconName;
+  locked?: boolean;
+};
+
+const badges: Badge[] = [
+  { id: "cc-solver", platform: "CodeChef", title: "Problem Solver", detail: "Awarded for solving 50+ problems on CodeChef.", shape: "circle", color: "#e9a23b", image: problemSolverImg, icon: "code" },
+  { id: "cc-streak", platform: "CodeChef", title: "Coding Streak", detail: "A 5-day streak of solving problems back to back.", shape: "hex", color: "#d4ad95", image: streakImg, icon: "spark" },
+  { id: "cc-sql", platform: "CodeChef", title: "SQL Master", detail: "Perfect 1500 / 1500 on the CodeChef SQL skill test.", shape: "shield", color: "#4aa8a0", image: sqlTestImg, icon: "database" },
+  { id: "lc-first", platform: "LeetCode", title: "First Solve", detail: "Unlocks when I solve my first LeetCode problem.", shape: "pent", color: "#758398", icon: "code", locked: true },
+  { id: "lc-streak", platform: "LeetCode", title: "7-Day Streak", detail: "Unlocks after a full week of daily practice.", shape: "hex", color: "#758398", icon: "spark", locked: true },
+  { id: "lc-50", platform: "LeetCode", title: "50 Problems", detail: "Unlocks at 50 solved problems.", shape: "shield", color: "#758398", icon: "design", locked: true },
+  { id: "lc-100", platform: "LeetCode", title: "Century", detail: "Unlocks at 100 solved problems.", shape: "circle", color: "#758398", icon: "azure", locked: true },
+  { id: "lc-contest", platform: "LeetCode", title: "Contest Ready", detail: "Unlocks on my first weekly contest.", shape: "pent", color: "#758398", icon: "cloud", locked: true },
+];
+
 const platforms = [
   {
     name: "CodeChef",
     tagline: "Competitive Programming",
-    description: "I love the thrill of competitive programming. It's incredibly fun, pushes my logical thinking to the limit, and continuously boosts my knowledge of algorithms and data structures.",
-    stats: [
-      { label: "Problems Solved", value: "50+" },
-      { label: "Coding Streak", value: "5 Days" },
-    ],
-    badges: ["codechef-problem-solver.png", "codechef-streak.png"],
-    link: "https://www.codechef.com/users/kylepillay", // Replace with your actual CodeChef link
-    linkText: "View CodeChef Profile"
+    description: "I love the thrill of competitive programming. It pushes my logical thinking and keeps boosting my knowledge of algorithms and data structures.",
+    stats: [{ label: "Problems Solved", value: "50+" }, { label: "Coding Streak", value: "5 Days" }],
+    link: "https://www.codechef.com/users/kylepillay",
+    linkText: "View CodeChef Profile",
   },
   {
     name: "LeetCode",
     tagline: "Daily Practice",
-    description: "LeetCode is my daily gym for the brain. I enjoy tackling complex problems here to sharpen my coding skills and prepare for real-world technical challenges.",
-    stats: [
-      { label: "Problems Solved", value: "Soon" },
-      { label: "Current Streak", value: "0 Days" },
-    ],
-    badges: [],
-    link: "https://leetcode.com/", // Replace with your actual LeetCode link
-    linkText: "View LeetCode Profile"
-  }
+    description: "LeetCode is my daily gym for the brain. I tackle complex problems here to sharpen my skills and prepare for real-world technical challenges.",
+    stats: [{ label: "Problems Solved", value: "Soon" }, { label: "Current Streak", value: "0 Days" }],
+    link: "https://leetcode.com/",
+    linkText: "View LeetCode Profile",
+  },
 ];
 
 function SectionTitle({ eyebrow, title, intro }: { eyebrow: string; title: string; intro?: string }) {
@@ -120,10 +138,70 @@ function SectionTitle({ eyebrow, title, intro }: { eyebrow: string; title: strin
   );
 }
 
-function CodeChefHighlight() {
+function BadgeShape({ badge, large = false }: { badge: Badge; large?: boolean }) {
   return (
-    <div className="codechef-highlight reveal">
-      <div className="highlight-content">
+    <span
+      className={`badge-shape ${badge.locked ? "is-locked" : ""} ${large ? "is-large" : ""}`}
+      style={{ "--badge": badge.color } as CSSProperties}
+    >
+      <span className={`badge-body shape-${badge.shape}`}>
+        <span className="badge-face">
+          {badge.image
+            ? <img src={badge.image} alt={`${badge.title} badge`} loading="lazy" />
+            : <Icon name={badge.icon} size={large ? 64 : 30} />}
+        </span>
+      </span>
+    </span>
+  );
+}
+
+function BadgeGallery() {
+  const [filter, setFilter] = useState<"All" | "CodeChef" | "LeetCode">("All");
+  const [selectedId, setSelectedId] = useState(badges[0].id);
+  const visible = badges.filter((b) => filter === "All" || b.platform === filter);
+  const selected = badges.find((b) => b.id === selectedId) ?? badges[0];
+
+  return (
+    <div className="badge-creator reveal">
+      <div className="badge-gallery">
+        <div className="badge-tabs" role="tablist" aria-label="Filter badges">
+          {(["All", "CodeChef", "LeetCode"] as const).map((tab) => (
+            <button key={tab} role="tab" aria-selected={filter === tab} className={filter === tab ? "is-active" : ""} onClick={() => setFilter(tab)}>
+              {tab}
+            </button>
+          ))}
+        </div>
+        <div className="badge-grid">
+          {visible.map((badge) => (
+            <button
+              key={badge.id}
+              className={`badge-tile ${badge.id === selected.id ? "is-active" : ""}`}
+              onClick={() => setSelectedId(badge.id)}
+              aria-pressed={badge.id === selected.id}
+              aria-label={badge.title}
+            >
+              <BadgeShape badge={badge} />
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="badge-preview">
+        <span className="preview-label">Featured badge</span>
+        <div className="preview-stage">
+          <BadgeShape badge={selected} large />
+        </div>
+        <h3>{selected.title}</h3>
+        <span className="preview-platform">{selected.platform}{selected.locked ? " · Locked" : " · Earned"}</span>
+        <p>{selected.detail}</p>
+      </div>
+    </div>
+  );
+}
+
+function SqlTestCard() {
+  return (
+    <div className="sql-card reveal">
+      <div className="sql-copy">
         <span className="eyebrow">CodeChef Skill Test</span>
         <h3>SQL Online Test and Quiz</h3>
         <p>Scored <strong>1500 / 1500</strong> points</p>
@@ -133,15 +211,7 @@ function CodeChefHighlight() {
           <span><i className="dot gray" /> 00 Unattempted</span>
         </div>
       </div>
-      <div className="highlight-score">
-        <div className="score-circle">
-          <img 
-            src={`${import.meta.env.BASE_URL}codechef-sql-test.png`} 
-            alt="CodeChef SQL Test Score" 
-            className="score-image"
-          />
-        </div>
-      </div>
+      <img className="sql-shot" src={sqlTestImg} alt="CodeChef SQL test result screenshot" loading="lazy" />
     </div>
   );
 }
@@ -159,7 +229,7 @@ function App() {
     return () => observer.disconnect();
   }, []);
 
-  const handlePointer = (event: React.PointerEvent<HTMLElement>) => {
+  const handlePointer = (event: PointerEvent<HTMLElement>) => {
     const x = (event.clientX / window.innerWidth - 0.5) * 18;
     const y = (event.clientY / window.innerHeight - 0.5) * 18;
     event.currentTarget.style.setProperty("--mouse-x", `${x}px`);
@@ -244,10 +314,10 @@ function App() {
           <SectionTitle eyebrow="Capabilities" title="A versatile toolkit for ambitious ideas." intro="From interface to infrastructure, I work across the stack to create cohesive digital products." />
           <div className="skills-grid">
             {skills.map((skill, index) => (
-              <article className={`skill-card reveal ${skill.featured ? "skill-featured" : ""}`} style={{ "--delay": `${index * 55}ms` } as React.CSSProperties} key={skill.name}>
+              <article className={`skill-card reveal ${skill.featured ? "skill-featured" : ""}`} style={{ "--delay": `${index * 55}ms` } as CSSProperties} key={skill.name}>
                 <div className="skill-top"><span>{skill.name}</span><strong>{skill.value}%</strong></div>
                 <p>{skill.meta}</p>
-                <div className="progress-track"><i style={{ "--progress": `${skill.value}%` } as React.CSSProperties} /></div>
+                <div className="progress-track"><i style={{ "--progress": `${skill.value}%` } as CSSProperties} /></div>
               </article>
             ))}
           </div>
@@ -291,51 +361,29 @@ function App() {
         </section>
 
         <section id="platforms" className="section platforms-section">
-          <SectionTitle 
-            eyebrow="Beyond the build" 
-            title="Problem solving is my playground." 
-            intro="I genuinely enjoy spending my free time on competitive programming platforms. It's fun, it keeps my mind sharp, and it constantly boosts my knowledge." 
+          <SectionTitle
+            eyebrow="Beyond the build"
+            title="Problem solving is my playground."
+            intro="I genuinely enjoy spending my free time on competitive programming platforms. It's fun, it keeps my mind sharp, and it constantly boosts my knowledge."
           />
-          
+          <BadgeGallery />
           <div className="platform-grid">
             {platforms.map((platform) => (
               <article className="platform-card reveal" key={platform.name}>
-                <div className="platform-head">
-                  <h3>{platform.name}</h3>
-                  <span>{platform.tagline}</span>
-                </div>
+                <div className="platform-head"><h3>{platform.name}</h3><span>{platform.tagline}</span></div>
                 <p>{platform.description}</p>
-                
                 <div className="platform-stats">
-                  {platform.stats.map((stat, i) => (
-                    <div key={i}>
-                      <strong>{stat.value}</strong>
-                      <span>{stat.label}</span>
-                    </div>
+                  {platform.stats.map((stat) => (
+                    <div key={stat.label}><strong>{stat.value}</strong><span>{stat.label}</span></div>
                   ))}
                 </div>
-
-                {platform.badges.length > 0 && (
-                  <div className="platform-badges">
-                    {platform.badges.map((badge, i) => (
-                      <img 
-                        key={i} 
-                        src={`${import.meta.env.BASE_URL}${badge}`} 
-                        alt="CodeChef Badge" 
-                        className="platform-badge-img" 
-                      />
-                    ))}
-                  </div>
-                )}
-
                 <a href={platform.link} target="_blank" rel="noreferrer" className="button button-secondary">
                   {platform.linkText} <Icon name="arrow" size={16} />
                 </a>
               </article>
             ))}
           </div>
-
-          <CodeChefHighlight />
+          <SqlTestCard />
         </section>
 
         <section id="channels" className="section channels-section">
