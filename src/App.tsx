@@ -38,7 +38,7 @@ function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
   );
 }
 
-const navItems = ["Home", "About", "Skills", "Projects", "Services", "Channels", "Contact"];
+const navItems = ["Home", "About", "Skills", "Projects", "Services", "Platforms", "Channels", "Contact"];
 
 const skills = [
   { name: "Python", meta: "Django · Flask · Automation", value: 80, featured: true },
@@ -83,12 +83,62 @@ const services: { icon: IconName; title: string; text: string }[] = [
   { icon: "design", title: "UI/UX Design", text: "Refined digital experiences where visual craft and usability work in harmony." },
 ];
 
+const platforms = [
+  {
+    name: "CodeChef",
+    tagline: "Competitive Programming",
+    description: "I love the thrill of competitive programming. It's incredibly fun, pushes my logical thinking to the limit, and continuously boosts my knowledge of algorithms and data structures.",
+    stats: [
+      { label: "Problems Solved", value: "50+" },
+      { label: "Coding Streak", value: "5 Days" },
+    ],
+    badges: ["Bronze Problem Solver", "Bronze Streak"],
+    link: "https://www.codechef.com/users/kylepillay", // Replace with your actual CodeChef link
+    linkText: "View CodeChef Profile"
+  },
+  {
+    name: "LeetCode",
+    tagline: "Daily Practice",
+    description: "LeetCode is my daily gym for the brain. I enjoy tackling complex problems here to sharpen my coding skills and prepare for real-world technical challenges.",
+    stats: [
+      { label: "Problems Solved", value: "Soon" },
+      { label: "Current Streak", value: "0 Days" },
+    ],
+    badges: [],
+    link: "https://leetcode.com/", // Replace with your actual LeetCode link
+    linkText: "View LeetCode Profile"
+  }
+];
+
 function SectionTitle({ eyebrow, title, intro }: { eyebrow: string; title: string; intro?: string }) {
   return (
     <div className="section-heading reveal">
       <span className="eyebrow">{eyebrow}</span>
       <h2>{title}</h2>
       {intro && <p>{intro}</p>}
+    </div>
+  );
+}
+
+function CodeChefHighlight() {
+  return (
+    <div className="codechef-highlight reveal">
+      <div className="highlight-content">
+        <span className="eyebrow">CodeChef Skill Test</span>
+        <h3>SQL Online Test and Quiz</h3>
+        <p>Scored <strong>1500 / 1500</strong> points</p>
+        <div className="highlight-stats">
+          <span><i className="dot green" /> 15 Correct</span>
+          <span><i className="dot red" /> 00 Wrong</span>
+          <span><i className="dot gray" /> 00 Unattempted</span>
+        </div>
+      </div>
+      <div className="highlight-score">
+        <div className="score-circle">
+          <span>100%</span>
+          <small>Skill Score</small>
+        </div>
+      </div>
     </div>
   );
 }
@@ -237,8 +287,51 @@ function App() {
           </div>
         </section>
 
+        <section id="platforms" className="section platforms-section">
+          <SectionTitle 
+            eyebrow="Beyond the build" 
+            title="Problem solving is my playground." 
+            intro="I genuinely enjoy spending my free time on competitive programming platforms. It's fun, it keeps my mind sharp, and it constantly boosts my knowledge." 
+          />
+          
+          <div className="platform-grid">
+            {platforms.map((platform) => (
+              <article className="platform-card reveal" key={platform.name}>
+                <div className="platform-head">
+                  <h3>{platform.name}</h3>
+                  <span>{platform.tagline}</span>
+                </div>
+                <p>{platform.description}</p>
+                
+                <div className="platform-stats">
+                  {platform.stats.map((stat, i) => (
+                    <div key={i}>
+                      <strong>{stat.value}</strong>
+                      <span>{stat.label}</span>
+                    </div>
+                  ))}
+                </div>
+
+                {platform.badges.length > 0 && (
+                  <div className="platform-badges">
+                    {platform.badges.map((badge, i) => (
+                      <span key={i} className="badge">{badge}</span>
+                    ))}
+                  </div>
+                )}
+
+                <a href={platform.link} target="_blank" rel="noreferrer" className="button button-secondary">
+                  {platform.linkText} <Icon name="arrow" size={16} />
+                </a>
+              </article>
+            ))}
+          </div>
+
+          <CodeChefHighlight />
+        </section>
+
         <section id="channels" className="section channels-section">
-          <SectionTitle eyebrow="Beyond the build" title="Sharing the work. Growing together." />
+          <SectionTitle eyebrow="Sharing the work" title="Growing together." />
           <div className="channel-grid">
             <article className="channel-card github-card reveal">
               <div className="channel-head"><span className="channel-icon"><Icon name="github" size={30} /></span><span>Open source</span></div>
