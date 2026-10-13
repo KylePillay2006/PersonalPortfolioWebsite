@@ -92,7 +92,7 @@ const platforms = [
       { label: "Problems Solved", value: "50+" },
       { label: "Coding Streak", value: "5 Days" },
     ],
-    badges: ["Bronze Problem Solver", "Bronze Streak"],
+    badges: ["codechef-problem-solver.png", "codechef-streak.png"],
     link: "https://www.codechef.com/users/kylepillay", // Replace with your actual CodeChef link
     linkText: "View CodeChef Profile"
   },
@@ -135,8 +135,11 @@ function CodeChefHighlight() {
       </div>
       <div className="highlight-score">
         <div className="score-circle">
-          <span>100%</span>
-          <small>Skill Score</small>
+          <img 
+            src={`${import.meta.env.BASE_URL}codechef-sql-test.png`} 
+            alt="CodeChef SQL Test Score" 
+            className="score-image"
+          />
         </div>
       </div>
     </div>
@@ -315,7 +318,12 @@ function App() {
                 {platform.badges.length > 0 && (
                   <div className="platform-badges">
                     {platform.badges.map((badge, i) => (
-                      <span key={i} className="badge">{badge}</span>
+                      <img 
+                        key={i} 
+                        src={`${import.meta.env.BASE_URL}${badge}`} 
+                        alt="CodeChef Badge" 
+                        className="platform-badge-img" 
+                      />
                     ))}
                   </div>
                 )}

@@ -170,8 +170,13 @@ button, a { -webkit-tap-highlight-color: transparent; }
    PROBLEM SOLVING / PLATFORMS SECTION
 =================================== */
 .platforms-section {
-  background: var(--paper);
+  background: var(--slate-deep); /* Changed to grey to match Skills */
 }
+
+/* Update the section titles to be white/grey since the background is now dark */
+.platforms-section .eyebrow { color: var(--clay); }
+.platforms-section .section-heading h2 { color: var(--white); }
+.platforms-section .section-heading > p { color: var(--powder); }
 
 .platform-grid {
   display: grid;
@@ -182,10 +187,10 @@ button, a { -webkit-tap-highlight-color: transparent; }
 
 .platform-card {
   padding: 38px;
-  border: 1px solid var(--line);
+  border: 1px solid rgba(255, 255, 255, 0.1); /* Adjusted for dark bg */
   border-radius: 20px;
-  background: var(--white);
-  box-shadow: 0 12px 35px rgba(57, 66, 79, 0.05);
+  background: rgba(255, 255, 255, 0.045); /* Glassy dark look */
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
   transition: transform 0.3s, box-shadow 0.3s, border 0.3s;
   display: flex;
   flex-direction: column;
@@ -193,8 +198,8 @@ button, a { -webkit-tap-highlight-color: transparent; }
 
 .platform-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 18px 45px rgba(57, 66, 79, 0.1);
-  border-color: var(--clay);
+  box-shadow: 0 18px 45px rgba(0, 0, 0, 0.25);
+  border-color: rgba(212, 173, 149, 0.5);
 }
 
 .platform-head {
@@ -202,7 +207,7 @@ button, a { -webkit-tap-highlight-color: transparent; }
   justify-content: space-between;
   align-items: baseline;
   margin-bottom: 20px;
-  border-bottom: 1px solid var(--line);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding-bottom: 15px;
 }
 
@@ -210,19 +215,19 @@ button, a { -webkit-tap-highlight-color: transparent; }
   font-family: "Playfair Display", serif;
   font-size: 28px;
   margin: 0;
-  color: var(--slate-deep);
+  color: var(--white); /* White text */
 }
 
 .platform-head span {
   font-size: 11px;
   text-transform: uppercase;
   letter-spacing: 0.1em;
-  color: var(--clay-dark);
+  color: var(--clay);
   font-weight: 600;
 }
 
 .platform-card p {
-  color: var(--slate);
+  color: var(--powder); /* Light text */
   font-size: 14px;
   line-height: 1.7;
   margin: 0 0 25px;
@@ -243,38 +248,45 @@ button, a { -webkit-tap-highlight-color: transparent; }
 .platform-stats strong {
   font-family: "Playfair Display", serif;
   font-size: 24px;
-  color: var(--slate-deep);
+  color: var(--clay); /* Clay accent */
 }
 
 .platform-stats span {
   font-size: 10px;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--blue-gray);
+  color: var(--powder);
   margin-top: 4px;
 }
 
+/* Updated to hold images instead of text pills */
 .platform-badges {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 12px;
   margin-bottom: 25px;
+  align-items: center;
 }
 
-.badge {
-  padding: 6px 12px;
-  border-radius: 20px;
-  background: rgba(212, 173, 149, 0.25);
-  color: var(--slate-deep);
-  font-size: 11px;
-  font-weight: 600;
+.platform-badge-img {
+  height: 50px; /* Adjust this height if the badges look too big or small */
+  width: auto;
+  object-fit: contain;
 }
 
 .platform-card .button {
   align-self: flex-start;
+  background: rgba(255,255,255,.15); /* Make the button look good on dark bg */
+  color: var(--white);
+  border-color: rgba(255,255,255,.3);
+}
+.platform-card .button:hover {
+  background: var(--clay);
+  color: var(--slate-deep);
+  border-color: var(--clay);
 }
 
-/* CodeChef Highlight Card */
+/* CodeChef Highlight Card (Now sits inside the dark section) */
 .codechef-highlight {
   display: grid;
   grid-template-columns: 2fr 1fr;
@@ -282,23 +294,12 @@ button, a { -webkit-tap-highlight-color: transparent; }
   align-items: center;
   padding: 40px;
   border-radius: 20px;
-  background: linear-gradient(135deg, var(--slate-deep) 0%, #2a333e 100%);
+  background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, rgba(255,255,255,0.02) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--white);
-  box-shadow: 0 20px 50px rgba(57, 66, 79, 0.2);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
   position: relative;
   overflow: hidden;
-}
-
-.codechef-highlight::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -20%;
-  width: 60%;
-  height: 200%;
-  background: radial-gradient(circle, rgba(212, 173, 149, 0.15) 0%, transparent 70%);
-  transform: rotate(30deg);
-  pointer-events: none;
 }
 
 .highlight-content {
@@ -361,34 +362,23 @@ button, a { -webkit-tap-highlight-color: transparent; }
 }
 
 .score-circle {
-  width: 160px;
-  height: 160px;
+  width: 180px; /* Made slightly bigger for the image */
+  height: 180px;
   border-radius: 50%;
-  border: 4px solid rgba(212, 173, 149, 0.3);
+  border: 4px solid rgba(212, 173, 149, 0.4);
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
   background: rgba(255, 255, 255, 0.05);
   backdrop-filter: blur(10px);
-  box-shadow: 0 0 40px rgba(212, 173, 149, 0.2);
+  box-shadow: 0 0 50px rgba(212, 173, 149, 0.2);
+  overflow: hidden; /* Keeps image inside circle */
 }
 
-.score-circle span {
-  font-family: "Playfair Display", serif;
-  font-size: 42px;
-  font-weight: 600;
-  color: var(--white);
-  line-height: 1;
-}
-
-.score-circle small {
-  font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  color: var(--clay);
-  margin-top: 8px;
+.score-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Makes the screenshot fill the circle */
 }
 /* =================================== */
 
