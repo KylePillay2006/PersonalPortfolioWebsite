@@ -1,7 +1,4 @@
 import { useEffect, useState, type CSSProperties, type FormEvent, type PointerEvent, type ReactNode } from "react";
-import problemSolverImg from "./assets/codechef-problem-solver.png";
-import streakImg from "./assets/codechef-streak.png";
-import sqlTestImg from "./assets/codechef-sql-test.png";
 
 type IconName =
   | "arrow"
@@ -86,29 +83,6 @@ const services: { icon: IconName; title: string; text: string }[] = [
   { icon: "design", title: "UI/UX Design", text: "Refined digital experiences where visual craft and usability work in harmony." },
 ];
 
-type Badge = {
-  id: string;
-  platform: "CodeChef" | "LeetCode";
-  title: string;
-  detail: string;
-  shape: "hex" | "shield" | "circle" | "pent";
-  color: string;
-  image?: string;
-  icon: IconName;
-  locked?: boolean;
-};
-
-const badges: Badge[] = [
-  { id: "cc-solver", platform: "CodeChef", title: "Problem Solver", detail: "Awarded for solving 50+ problems on CodeChef.", shape: "circle", color: "#e9a23b", image: problemSolverImg, icon: "code" },
-  { id: "cc-streak", platform: "CodeChef", title: "Coding Streak", detail: "A 5-day streak of solving problems back to back.", shape: "hex", color: "#d4ad95", image: streakImg, icon: "spark" },
-  { id: "cc-sql", platform: "CodeChef", title: "SQL Master", detail: "Perfect 1500 / 1500 on the CodeChef SQL skill test.", shape: "shield", color: "#4aa8a0", image: sqlTestImg, icon: "database" },
-  { id: "lc-first", platform: "LeetCode", title: "First Solve", detail: "Unlocks when I solve my first LeetCode problem.", shape: "pent", color: "#758398", icon: "code", locked: true },
-  { id: "lc-streak", platform: "LeetCode", title: "7-Day Streak", detail: "Unlocks after a full week of daily practice.", shape: "hex", color: "#758398", icon: "spark", locked: true },
-  { id: "lc-50", platform: "LeetCode", title: "50 Problems", detail: "Unlocks at 50 solved problems.", shape: "shield", color: "#758398", icon: "design", locked: true },
-  { id: "lc-100", platform: "LeetCode", title: "Century", detail: "Unlocks at 100 solved problems.", shape: "circle", color: "#758398", icon: "azure", locked: true },
-  { id: "lc-contest", platform: "LeetCode", title: "Contest Ready", detail: "Unlocks on my first weekly contest.", shape: "pent", color: "#758398", icon: "cloud", locked: true },
-];
-
 const platforms = [
   {
     name: "CodeChef",
@@ -128,90 +102,19 @@ const platforms = [
   },
 ];
 
+// Hardcoded achievements - simply the filename, stored in the public folder
+const achievements = [
+  { id: "cc-solver", title: "Problem Solver", platform: "CodeChef", image: "codechef-problem-solver.png" },
+  { id: "cc-streak", title: "5-Day Streak", platform: "CodeChef", image: "codechef-streak.png" },
+  { id: "cc-sql", title: "SQL Skill Test 100%", platform: "CodeChef", image: "codechef-sql-test.png" },
+];
+
 function SectionTitle({ eyebrow, title, intro }: { eyebrow: string; title: string; intro?: string }) {
   return (
     <div className="section-heading reveal">
       <span className="eyebrow">{eyebrow}</span>
       <h2>{title}</h2>
       {intro && <p>{intro}</p>}
-    </div>
-  );
-}
-
-function BadgeShape({ badge, large = false }: { badge: Badge; large?: boolean }) {
-  return (
-    <span
-      className={`badge-shape ${badge.locked ? "is-locked" : ""} ${large ? "is-large" : ""}`}
-      style={{ "--badge": badge.color } as CSSProperties}
-    >
-      <span className={`badge-body shape-${badge.shape}`}>
-        <span className="badge-face">
-          {badge.image
-            ? <img src={badge.image} alt={`${badge.title} badge`} loading="lazy" />
-            : <Icon name={badge.icon} size={large ? 64 : 30} />}
-        </span>
-      </span>
-    </span>
-  );
-}
-
-function BadgeGallery() {
-  const [filter, setFilter] = useState<"All" | "CodeChef" | "LeetCode">("All");
-  const [selectedId, setSelectedId] = useState(badges[0].id);
-  const visible = badges.filter((b) => filter === "All" || b.platform === filter);
-  const selected = badges.find((b) => b.id === selectedId) ?? badges[0];
-
-  return (
-    <div className="badge-creator reveal">
-      <div className="badge-gallery">
-        <div className="badge-tabs" role="tablist" aria-label="Filter badges">
-          {(["All", "CodeChef", "LeetCode"] as const).map((tab) => (
-            <button key={tab} role="tab" aria-selected={filter === tab} className={filter === tab ? "is-active" : ""} onClick={() => setFilter(tab)}>
-              {tab}
-            </button>
-          ))}
-        </div>
-        <div className="badge-grid">
-          {visible.map((badge) => (
-            <button
-              key={badge.id}
-              className={`badge-tile ${badge.id === selected.id ? "is-active" : ""}`}
-              onClick={() => setSelectedId(badge.id)}
-              aria-pressed={badge.id === selected.id}
-              aria-label={badge.title}
-            >
-              <BadgeShape badge={badge} />
-            </button>
-          ))}
-        </div>
-      </div>
-      <div className="badge-preview">
-        <span className="preview-label">Featured badge</span>
-        <div className="preview-stage">
-          <BadgeShape badge={selected} large />
-        </div>
-        <h3>{selected.title}</h3>
-        <span className="preview-platform">{selected.platform}{selected.locked ? " · Locked" : " · Earned"}</span>
-        <p>{selected.detail}</p>
-      </div>
-    </div>
-  );
-}
-
-function SqlTestCard() {
-  return (
-    <div className="sql-card reveal">
-      <div className="sql-copy">
-        <span className="eyebrow">CodeChef Skill Test</span>
-        <h3>SQL Online Test and Quiz</h3>
-        <p>Scored <strong>1500 / 1500</strong> points</p>
-        <div className="highlight-stats">
-          <span><i className="dot green" /> 15 Correct</span>
-          <span><i className="dot red" /> 00 Wrong</span>
-          <span><i className="dot gray" /> 00 Unattempted</span>
-        </div>
-      </div>
-      <img className="sql-shot" src={sqlTestImg} alt="CodeChef SQL test result screenshot" loading="lazy" />
     </div>
   );
 }
@@ -366,7 +269,7 @@ function App() {
             title="Problem solving is my playground."
             intro="I genuinely enjoy spending my free time on competitive programming platforms. It's fun, it keeps my mind sharp, and it constantly boosts my knowledge."
           />
-          <BadgeGallery />
+          
           <div className="platform-grid">
             {platforms.map((platform) => (
               <article className="platform-card reveal" key={platform.name}>
@@ -383,7 +286,25 @@ function App() {
               </article>
             ))}
           </div>
-          <SqlTestCard />
+
+          {/* Simple Achievements Grid */}
+          <div className="achievements-grid">
+            {achievements.map((item) => (
+              <figure className="achievement-card reveal" key={item.id}>
+                <div className="achievement-img-wrap">
+                  <img 
+                    src={`${import.meta.env.BASE_URL}${item.image}`} 
+                    alt={item.title} 
+                    loading="lazy" 
+                  />
+                </div>
+                <figcaption>
+                  <strong>{item.title}</strong>
+                  <span>{item.platform}</span>
+                </figcaption>
+              </figure>
+            ))}
+          </div>
         </section>
 
         <section id="channels" className="section channels-section">
